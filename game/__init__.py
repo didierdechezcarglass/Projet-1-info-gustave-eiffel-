@@ -49,8 +49,12 @@ class Grid:
         """
         returns the info at grid position x,y
         """
-        return self.__grid[y][x].get_info * 1
-
+        return self.__grid[y][x].get_info
+    def add_object(self, x : int, y : int, lst_position : int, object) -> None:
+        """
+        adds the object to a list
+        """
+        self.__grid[y][x].change_object(lst_position, object)
     def __str__(self) -> str:
         """
         prints the whole grid
@@ -64,3 +68,16 @@ class Grid:
 
         return str(matrix)
 
+class Ball:
+    """
+    player ball containing info on wher
+    """
+    def __init__(self, player_id : int):
+        """
+        constructor
+        """
+        self.__player_id = player_id
+        self.__alive = True
+    @property
+    def kill(self):
+        self.__alive = False
