@@ -58,4 +58,3 @@ for loop in a:
     print("\n")
     if stock!=loop:
         print("FAUX ERREUR")"""
-    
