@@ -12,25 +12,31 @@ class Tile:
     attributes:
     __present_objects : list -> private attributes than can only be modified using change_object
     """
-    def __init__(self):
+    def __init__(self) -> None:
         """
         constructor
         """
-        self.__present_objects = [""] * 3
+        self.__current_ball = None
+        self.__vertical_hole = 0
+        self.__horizontal_hole = 0
 
     @property
     def get_info(self) -> list:
         """
         returns the current object in tile self
         """
-        return self.__present_objects
+        return [self.__current_ball, self.__vertical_hole, self.__horizontal_hole]
 
-    def change_object(self, position : int, object : str):
+    def change_hole(self, hole_type : str, hole_value : bool | int) -> None:
         """
-        sets the current object in list index position to string object
+        changes the hole inside the tile  and possibly removes the ball
         """
-        self.__present_objects[position] = object
-
+        if hole_type == "vert":
+            self.__vertical_hole = hole_value
+        if hole_type == "hor":
+            self.__horizontal_hole = hole_value
+        if all([self.__horizontal_hole, self.__vertical_hole]) and self.__current_ball is not None:
+            self.__current_ball.kill()
 class Grid:
     """
     7x7 grid for the game
@@ -43,18 +49,20 @@ class Grid:
         """
         constructor
         """
-        self.__grid: list = [[Tile() for _ in range(11)] for _ in range(11)]
+        self.__grid: list = [[Tile() for _ in range(7)] for _ in range(7)]
+        self.horizontal_length = 7
+        self.vertical_length = 7
 
     def show_info(self, x : int, y : int) -> list:
         """
         returns the info at grid position x,y
         """
         return self.__grid[y][x].get_info
-    def add_object(self, x : int, y : int, lst_position : int, object) -> None:
+    def affect_hole(self, x : int, y : int, hole_type : str, hole : bool) -> None:
         """
         adds the object to a list
         """
-        self.__grid[y][x].change_object(lst_position, object)
+        self.__grid[y][x].change_hole(hole_type, hole)
     def __str__(self) -> str:
         """
         prints the whole grid
@@ -70,7 +78,7 @@ class Grid:
 
 class Ball:
     """
-    player ball containing info on wher
+    player ball containing status and player info
     """
     def __init__(self, player_id : int):
         """
@@ -81,3 +89,6 @@ class Ball:
     @property
     def kill(self):
         self.__alive = False
+
+    def draw(self):
+        pass
