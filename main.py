@@ -24,4 +24,3 @@ tirettes_list[7].decalage(1)
 tirettes_list[7].affect(main_grid)
 
 print(main_grid)
-

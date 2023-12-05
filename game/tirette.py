@@ -1,7 +1,30 @@
 import random
+"""def random_tirette():
+    index_iter=[i for i in range(7)]
+
+    random_binary=[random.choice(index_iter),random.choice(index_iter)]
+    for loop in random_binary:
+        index_iter.remove(loop)
+    
+    random_hole=random
+    return [random.randint(0,1) if (i not in random_binary and i not in (0,1)) else 0 for i in range(7)]"""
+
 def random_tirette():
-    random_binary=[random.randint(2, 8),random.randint(2, 8)]
-    return [random.randint(0,1) if (i not in random_binary and i not in (0,1)) else 0 for i in range(7)]
+    num_zeros=random.randint(1,5)
+    rendu=[1 for i in range(num_zeros)]+[0 for i in range(7-num_zeros)]
+    random.shuffle(rendu)
+    return rendu
+#--------------------test random tirette--------------------
+condition=True
+cpt=0
+while condition and cpt<100000:
+    a=random_tirette()
+    if a==[0,0,0,0,0,0,0]:
+        condition=False
+    cpt+=1
+print(cpt)
+
+#--------------------------------------------------------
 
 def decale(lst, sens):
     new_lst = [0] * len(lst)

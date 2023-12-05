@@ -84,6 +84,8 @@ class Grid:
 class Ball:
     """
     player ball containing status and player info
+
+    
     """
     def __init__(self, player_id : int):
         """
