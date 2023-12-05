@@ -25,7 +25,7 @@ class Tile:
         """
         returns the current object in tile self
         """
-        return [self.__current_ball, self.__vertical_hole, self.__horizontal_hole]
+        return [str(self.__current_ball), self.__vertical_hole, self.__horizontal_hole]
 
     def change_hole(self, hole_type : str, hole_value : bool | int) -> None:
         """
@@ -37,6 +37,9 @@ class Tile:
             self.__horizontal_hole = hole_value
         if all([self.__horizontal_hole, self.__vertical_hole]) and self.__current_ball is not None:
             self.__current_ball.kill()
+
+    def set_ball(self, ball):
+        self.__current_ball = ball
 class Grid:
     """
     7x7 grid for the game
@@ -63,6 +66,8 @@ class Grid:
         adds the object to a list
         """
         self.__grid[y][x].change_hole(hole_type, hole)
+    def set_ball(self, x : int, y : int, ball):
+        self.__grid[y][x].set_ball(ball)
     def __str__(self) -> str:
         """
         prints the whole grid
@@ -86,9 +91,11 @@ class Ball:
         """
         self.__player_id = player_id
         self.__alive = True
-    @property
     def kill(self):
         self.__alive = False
+
+    def __str__(self):
+        return str((self.__player_id, self.__alive))
 
     def draw(self):
         pass
