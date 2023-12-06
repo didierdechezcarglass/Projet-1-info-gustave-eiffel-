@@ -25,7 +25,7 @@ class Tile:
         """
         returns the current object in tile self
         """
-        return [str(self.__current_ball), self.__vertical_hole, self.__horizontal_hole]
+        return [self.__current_ball, self.__vertical_hole, self.__horizontal_hole]
 
     def change_hole(self, hole_type : str, hole_value : bool | int) -> None:
         """
@@ -84,8 +84,6 @@ class Grid:
 class Ball:
     """
     player ball containing status and player info
-
-    
     """
     def __init__(self, player_id : int):
         """
@@ -99,5 +97,10 @@ class Ball:
     def __str__(self):
         return str((self.__player_id, self.__alive))
 
-    def draw(self):
-        pass
+    @property
+    def alive(self):
+        return self.__alive
+
+    @property
+    def identity(self):
+        return self.__player_id
