@@ -2,14 +2,15 @@ from . import fltk as fl
 
 class Renderer:
     """
-    main game class that allows the user to run a gameploop
+    main game class that allows the user to run a gameloop
     """
     def __init__(self, res):
         self.scene = None
-        fl.cree_fenetre(*res, redimension=True)
+        fl.cree_fenetre(*res)
         self.__running = False
 
     def update(self, event):
+
         if self.scene is not None:
             self.scene.update(event)
             self.scene.draw()
