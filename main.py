@@ -1,5 +1,7 @@
 from engine import Renderer
-from engine.game_scene import Game
+from engine.menu_scene import Menu
+
+
 app = Renderer((800, 600))
-app.scene = Game()
+app.scene = Menu(app)
 app.run()

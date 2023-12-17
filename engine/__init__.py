@@ -6,7 +6,10 @@ class Renderer:
     """
     def __init__(self, res):
         self.scene = None
-        fl.cree_fenetre(*res)
+        fl.cree_fenetre(*res, redimension=False)
+        self.__running = False
+
+    def stop(self):
         self.__running = False
 
     def update(self, event):
