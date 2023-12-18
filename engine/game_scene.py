@@ -8,7 +8,16 @@ class Game:
     """
     Game scene class that manages the core mechanics
 
-    attributes
+    attributes:
+    grid : Grid() -> the empty grid
+    tirette_vert : list -> list of vertical tirettes
+    tirette_hor : list -> list of horizontal tirettes
+    player_balls : dict -> dictionnary containning list of player balls
+    current_player : int -> the current player number
+    game_stopped : bool -> checks if the game is stopped
+    winner : int | None -> the current winner
+    colors : list -> the list of ball colors
+    menu_button : Button -> the button to go back to the menu
     """
     def __init__(self, colors, player_number, menu_command) -> None:
         self.grid = Grid()
@@ -24,36 +33,46 @@ class Game:
         self.tirette_horizon = tirette_horizon
         n_player = player_number
         tiles_avail = []
-        self.player_balls = {player: [] for player in range(n_player)}
+        self.alive_players = [(i + 1, colors[i]) for i in range(n_player)]
         for y in range(self.grid.vertical_length):
             for x in range(self.grid.vertical_length):
                 if not all(self.grid.show_info(x, y)[1:3]):
                     tiles_avail.append((x, y))
-        n_balls = len(tiles_avail)
+        n_balls = 5 * n_player
         current_player = 0
         while n_balls > 0:
             coordinate = tiles_avail.pop(random.randint(0, len(tiles_avail) - 1))
             new_ball = Ball(current_player)
             self.grid.set_ball(*coordinate, new_ball)
-            self.player_balls[current_player].append(new_ball)
             current_player += 1
             current_player %= n_player
             n_balls -= 1
-        self.current_player = 1
+        self.current_player = 0
         self.game_stopped = False
-        self.winner = None
         self.colors = colors
+        self.n_players = n_player
         grid_size_x = self.grid.horizontal_length + 2
         grid_size_y = self.grid.vertical_length + 2
         s_x = fl.largeur_fenetre() // grid_size_x
         s_y = fl.hauteur_fenetre() // grid_size_y
-        self.menu_button = Button((0, 0), (s_x // 2, s_y // 2), ["<","black", s_y // 2], "red", command=menu_command)
+        self.menu_button = Button((0, 0), (s_x // 2, s_y // 2), ["<", "black", s_y // 2], "red", command=menu_command)
+
+    def check_players(self) -> list:
+        """
+        gives the number of players left after a move
+        """
+        alive_players = []
+        for y in range(self.grid.vertical_length):
+            for x in range(self.grid.horizontal_length):
+                current_ball = self.grid.show_info(x, y)[0]
+                if current_ball is not None and current_ball.alive and current_ball.identity not in [tup[0] for tup in alive_players]:
+                    alive_players.append((current_ball.identity, self.colors[current_ball.identity]))
+        return sorted(alive_players, key=lambda p: p[0])
+
+
     def update(self, event) -> None:
         """
         updates the scene
-
-        parameter :
-        event -> fltk event
         """
         mouse_coordinates = (fl.abscisse_souris(), fl.ordonnee_souris())
         grid_size_x = self.grid.horizontal_length + 2
@@ -61,6 +80,7 @@ class Game:
         s_x = fl.largeur_fenetre() / grid_size_x
         s_y = fl.hauteur_fenetre() / grid_size_y
         if fl.type_ev(event) == "ClicGauche" and not self.game_stopped:
+            # updates the game when left click
             coordinates = (int(mouse_coordinates[0] // s_x), int(mouse_coordinates[1] // s_y))
             coordinate_x = coordinates[0] / (grid_size_x - 1)
             coordinate_y = coordinates[1] / (grid_size_y - 1)
@@ -74,26 +94,12 @@ class Game:
                 self.tirette_vert[ls_ind].decalage(-1 if coordinate_y == 0 else 1)
                 self.tirette_vert[ls_ind].affect(self.grid)
                 self.current_player += 1
-            self.current_player = max(1, self.current_player % (len(self.player_balls) + 1))
-            dead_player = 0
-            possible_winner = None
-            for player in self.player_balls:
-                if not any([ball.alive for ball in self.player_balls[player]]):
-                    self.player_balls[player].clear()
-                    print(f"player {player} eliminated !")
-                    dead_player += 1
-                else:
-                    possible_winner = player
-            iterations = 0
-            while len(self.player_balls[self.current_player - 1]) == 0 and iterations < 4:
-                self.current_player += 1
-                self.current_player = max(1, self.current_player % (len(self.player_balls) + 1))
-                iterations += 1
+            self.alive_players = self.check_players()
+            self.current_player = max(0, self.current_player % (len(self.alive_players)))
+            self.game_stopped = len(self.alive_players) <= 1
 
-            if dead_player >= len(self.player_balls) - 1:
-                self.winner = possible_winner
-                self.game_stopped = True
-        self.menu_button.update(event, mouse_coordinates, {"Nombre Joueurs" : len(self.player_balls), "Largeur Fenêtre" :  fl.largeur_fenetre(), "Hauteur Fenêtre" : fl.hauteur_fenetre()})
+
+        self.menu_button.update(event, mouse_coordinates, {"Nombre Joueurs" : self.n_players, "Largeur Fenêtre" :  fl.largeur_fenetre(), "Hauteur Fenêtre" : fl.hauteur_fenetre()})
 
 
 
@@ -108,7 +114,7 @@ class Game:
         start_x = s_x
         start_y = s_y
         for tile_y in range(self.grid.vertical_length):
-            for tile_x in range(self.grid.vertical_length):
+            for tile_x in range(self.grid.horizontal_length):
                 tile = self.grid.show_info(tile_x, tile_y)
                 fl.cercle(start_x + s_x / 2, start_y + s_y / 2, min(s_x / 4, s_y / 4), couleur="black", remplissage="black")
                 if not tile[2]:
@@ -117,35 +123,32 @@ class Game:
                     fl.rectangle(start_x + s_x / 4, start_y, start_x + (3 * s_x) / 4, start_y + s_y, couleur="green", remplissage="green")
                 if tile[0] is not None and tile[0].alive:
                     fl.cercle(start_x + s_x / 2, start_y + s_y / 2, min(s_x / 8, s_y / 8), couleur=self.colors[tile[0].identity], remplissage=self.colors[tile[0].identity])
-                if tile_y == 0:
-                    fl.fleche(start_x + s_x / 2, s_y / 2, start_x + s_x / 2, (s_y / 2) - 1e-6, couleur="green",
-                              epaisseur=s_y / 8)
-                if tile_y == self.grid.vertical_length - 1:
-                    fl.fleche(start_x + s_x / 2, start_y + 3*s_y / 2, start_x + s_x / 2, (start_y + 3*s_y / 2) + 1e-6,
-                              couleur="green", epaisseur=s_x / 8)
                 start_x += s_x
-                if tile_x == 0:
-                    fl.fleche(s_x / 2, start_y + s_y / 2, (s_x / 2) - 1e-6, start_y + s_y / 2, couleur="red",
-                              epaisseur=s_x / 8)
-                if tile_x == self.grid.horizontal_length - 1:
-                    fl.fleche(start_x + s_x / 2, start_y + s_y / 2, (start_x + s_x / 2) + 1e-6, start_y + s_y / 2,
-                              couleur="red", epaisseur=s_x / 8)
-
             start_x = s_x
+            start_y += s_y
+
+        start_x = s_x
+        start_y = s_y
+        for point_x in range(1, self.grid.horizontal_length + 1):
+            fl.texte(start_x + s_x / 2, s_y / 2, chr(9650), "green", "center", taille=int(min(s_x / 4, s_y / 4)))
+            fl.texte(s_x / 2, start_y + s_y / 2, chr(9668), "red", "center", taille = int(min(s_x / 4, s_y / 4)))
+            fl.texte(start_x + s_x / 2, fl.hauteur_fenetre() - s_y / 2, chr(9660), "green", "center", taille=int(min(s_x / 4, s_y / 4)))
+            fl.texte(fl.largeur_fenetre() - s_x / 2, start_y + s_y / 2, chr(9658), "red", "center", taille=int(min(s_x / 4, s_y / 4)))
+            start_x += s_x
             start_y += s_y
 
         if not self.game_stopped:
             size_x = fl.taille_texte(" a vous !", taille = 2 * int(min(s_x / 8, s_y / 8)))[0]
-            player_color = self.colors[self.player_balls[self.current_player - 1][0].identity]
+            player_color = self.alive_players[self.current_player][1]
             circ_rad = min(s_x / 8, s_y / 8)
             fl.cercle((fl.largeur_fenetre() // 2) - size_x / 2, circ_rad, circ_rad, couleur=player_color, remplissage=player_color)
             fl.texte(fl.largeur_fenetre() // 2, 0, "  a vous !",
                      couleur="black", taille=2 * int(circ_rad), ancrage="n")
         else:
             size_x = fl.taille_texte(" a gagné !", taille=2 * int(min(s_x / 8, s_y / 8)))[0]
-            player_color = self.colors[self.player_balls[self.current_player - 1][0].identity]
+            player_color = self.alive_players[self.current_player][1]
             circ_rad = min(s_x / 8, s_y / 8)
-            if isinstance(self.winner, int):
+            if len(self.alive_players) == 1:
                 fl.cercle((fl.largeur_fenetre() // 2) - size_x / 2, circ_rad, circ_rad, couleur=player_color,
                           remplissage=player_color)
                 fl.texte(fl.largeur_fenetre() // 2, 0, "  a gagné !",
