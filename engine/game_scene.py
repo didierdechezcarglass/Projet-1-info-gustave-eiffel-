@@ -135,16 +135,16 @@ class Game:
             start_y += s_y
 
         if not self.game_stopped:
-            size_x = fl.taille_texte(" a vous !", taille = 2 * int(max(s_x / 8, s_y / 8)))[0]
+            size_x = fl.taille_texte(" a vous !", taille = 2 * int(min(s_x / 8, s_y / 8)))[0]
             player_color = self.colors[self.player_balls[self.current_player - 1][0].identity]
-            circ_rad = max(s_x / 8, s_y / 8)
+            circ_rad = min(s_x / 8, s_y / 8)
             fl.cercle((fl.largeur_fenetre() // 2) - size_x / 2, circ_rad, circ_rad, couleur=player_color, remplissage=player_color)
             fl.texte(fl.largeur_fenetre() // 2, 0, "  a vous !",
                      couleur="black", taille=2 * int(circ_rad), ancrage="n")
         else:
-            size_x = fl.taille_texte(" a gagné !", taille=2 * int(max(s_x / 8, s_y / 8)))[0]
+            size_x = fl.taille_texte(" a gagné !", taille=2 * int(min(s_x / 8, s_y / 8)))[0]
             player_color = self.colors[self.player_balls[self.current_player - 1][0].identity]
-            circ_rad = max(s_x / 8, s_y / 8)
+            circ_rad = min(s_x / 8, s_y / 8)
             if isinstance(self.winner, int):
                 fl.cercle((fl.largeur_fenetre() // 2) - size_x / 2, circ_rad, circ_rad, couleur=player_color,
                           remplissage=player_color)
