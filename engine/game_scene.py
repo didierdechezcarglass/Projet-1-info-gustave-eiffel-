@@ -110,13 +110,13 @@ class Game:
         for tile_y in range(self.grid.vertical_length):
             for tile_x in range(self.grid.vertical_length):
                 tile = self.grid.show_info(tile_x, tile_y)
-                fl.cercle(start_x + s_x / 2, start_y + s_y / 2, max(s_x / 4 , s_y / 4), couleur="black", remplissage="black")
+                fl.cercle(start_x + s_x / 2, start_y + s_y / 2, min(s_x / 4, s_y / 4), couleur="black", remplissage="black")
                 if not tile[2]:
                     fl.rectangle(start_x, start_y + s_y / 4, start_x + s_x, start_y + (3 * s_y) / 4, couleur="red", remplissage="red")
                 if not tile[1]:
                     fl.rectangle(start_x + s_x / 4, start_y, start_x + (3 * s_x) / 4, start_y + s_y, couleur="green", remplissage="green")
                 if tile[0] is not None and tile[0].alive:
-                    fl.cercle(start_x + s_x / 2, start_y + s_y / 2, max(s_x / 8, s_y / 8), couleur=self.colors[tile[0].identity], remplissage=self.colors[tile[0].identity])
+                    fl.cercle(start_x + s_x / 2, start_y + s_y / 2, min(s_x / 8, s_y / 8), couleur=self.colors[tile[0].identity], remplissage=self.colors[tile[0].identity])
                 if tile_y == 0:
                     fl.fleche(start_x + s_x / 2, s_y / 2, start_x + s_x / 2, (s_y / 2) - 1e-6, couleur="green",
                               epaisseur=s_y / 8)

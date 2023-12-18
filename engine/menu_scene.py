@@ -38,7 +38,7 @@ class Menu:
         commands = [lambda: set_game(self.app, self), lambda: set_setting(self.app, self), lambda : None, lambda : self.app.stop()]
         prompts = ["Jouer", "Paramètres", "Couleur balles", "Quitter"]
         for i in range(4):
-            self.buttons.append(Button((button_x, i*delta_y + fl.hauteur_fenetre() // 20), (size_x, size_y), [prompts[i], "black", size_y // 2], "blue", command=commands[i]))
+            self.buttons.append(Button((button_x, i*delta_y + fl.hauteur_fenetre() // 20), (size_x, size_y), [prompts[i], "black", min(size_x // 10, size_y // 2)], "blue", command=commands[i]))
 
     def update(self, event):
         mouse_coordinates = (fl.abscisse_souris(), fl.ordonnee_souris())

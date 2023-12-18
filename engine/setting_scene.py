@@ -10,7 +10,8 @@ class Setting:
         self.game = game
         self.settings = settings
         delta_y = fl.hauteur_fenetre() / len(self.settings)
-        text_sizey = int(delta_y / 10)
+        delta_x = fl.largeur_fenetre() / len(self.settings)
+        text_sizey = min(int(delta_x / 10), int(delta_y / 10))
         self.buttons = []
         button_sizex = fl.largeur_fenetre() / 50
         button_sizey = text_sizey
@@ -37,7 +38,8 @@ class Setting:
     def draw(self):
         start_y = 0
         delta_y = fl.hauteur_fenetre() / len(self.settings)
-        text_sizey = int(delta_y / 10)
+        delta_x = fl.largeur_fenetre() / len(self.settings)
+        text_sizey = min(int(delta_x / 10), int(delta_y / 10))
         button_sizex = fl.largeur_fenetre() / 50
         button_sizey = text_sizey
         start_x = fl.largeur_fenetre() / 2 + text_sizey
