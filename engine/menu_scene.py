@@ -2,12 +2,13 @@ from .button import Button
 from . import fltk as fl
 from .game_scene import Game
 from .setting_scene import Setting
+from .ballcolor_scene import BallColors
 def update_setting(settings, key, min_max, delta):
     settings[key] = min(min_max[1], max(min_max[0], settings[key] + delta))
 
 def get_default():
     return {"Nombre Joueurs" : 4, "Largeur Fenêtre" :  fl.largeur_fenetre(), "Hauteur Fenêtre" : fl.hauteur_fenetre()}
-DEFAULT_COLORS = ("#0000FF", "#00FFFF", "#FFFF00", "#000000")
+DEFAULT_COLORS = ["#0000FF", "#00FFFF", "#FFFF00", "#000000"]
 def menu_command(app, cached_settings):
     app.scene = Menu(app, *cached_settings)
 def set_setting(app, cls):
@@ -15,6 +16,9 @@ def set_setting(app, cls):
 
 def set_game(app, cls):
     app.scene = Game(cls.ball_color_settings, cls.game_setting["Nombre Joueurs"], lambda settings: menu_command(app, (settings, cls.ball_color_settings)))
+
+def set_ballcolor(app, cls):
+    app.scene = BallColors(lambda colors : menu_command(app, (cls.game_setting, colors)), cls.ball_color_settings, cls.game_setting)
 class Menu:
     def __init__(self, app, params=None, ball_colors= DEFAULT_COLORS):
         if params is None:
@@ -35,7 +39,7 @@ class Menu:
         button_x = (fl.largeur_fenetre() // 10)
         size_y = (fl.hauteur_fenetre() // 4) - (2*fl.hauteur_fenetre() // 20)
         delta_y = fl.hauteur_fenetre() // 4
-        commands = [lambda: set_game(self.app, self), lambda: set_setting(self.app, self), lambda : None, lambda : self.app.stop()]
+        commands = [lambda: set_game(self.app, self), lambda: set_setting(self.app, self), lambda : set_ballcolor(self.app, self), lambda : self.app.stop()]
         prompts = ["Jouer", "Paramètres", "Couleur balles", "Quitter"]
         for i in range(4):
             self.buttons.append(Button((button_x, i*delta_y + fl.hauteur_fenetre() // 20), (size_x, size_y), [prompts[i], "black", min(size_x // 10, size_y // 2)], "blue", command=commands[i]))

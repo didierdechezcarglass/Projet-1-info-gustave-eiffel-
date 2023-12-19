@@ -56,7 +56,7 @@ class Grid:
         self.horizontal_length = 7
         self.vertical_length = 7
 
-    def show_info(self, x : int, y : int) -> list:
+    def show_info(self, x: int, y: int) -> list:
         """
         returns the info at grid position x,y
         """
