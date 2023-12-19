@@ -122,7 +122,7 @@ class Game:
                 if not tile[1]:
                     fl.rectangle(start_x + s_x / 4, start_y, start_x + (3 * s_x) / 4, start_y + s_y, couleur="green", remplissage="green")
                 if tile[0] is not None and tile[0].alive:
-                    fl.cercle(start_x + s_x / 2, start_y + s_y / 2, min(s_x / 8, s_y / 8), couleur=self.colors[tile[0].identity], remplissage=self.colors[tile[0].identity])
+                    fl.cercle(start_x + s_x / 2, start_y + s_y / 2, min(s_x / 8, s_y / 8), couleur="black", remplissage=self.colors[tile[0].identity])
                 start_x += s_x
             start_x = s_x
             start_y += s_y
@@ -141,7 +141,7 @@ class Game:
             size_x = fl.taille_texte(" a vous !", taille = 2 * int(min(s_x / 8, s_y / 8)))[0]
             player_color = self.alive_players[self.current_player][1]
             circ_rad = min(s_x / 8, s_y / 8)
-            fl.cercle((fl.largeur_fenetre() // 2) - size_x / 2, circ_rad, circ_rad, couleur=player_color, remplissage=player_color)
+            fl.cercle((fl.largeur_fenetre() // 2) - size_x / 2, circ_rad, circ_rad, couleur="black", remplissage=player_color)
             fl.texte(fl.largeur_fenetre() // 2, 0, "  a vous !",
                      couleur="black", taille=2 * int(circ_rad), ancrage="n")
         else:
@@ -149,7 +149,7 @@ class Game:
             player_color = self.alive_players[self.current_player][1]
             circ_rad = min(s_x / 8, s_y / 8)
             if len(self.alive_players) == 1:
-                fl.cercle((fl.largeur_fenetre() // 2) - size_x / 2, circ_rad, circ_rad, couleur=player_color,
+                fl.cercle((fl.largeur_fenetre() // 2) - size_x / 2, circ_rad, circ_rad, couleur="black",
                           remplissage=player_color)
                 fl.texte(fl.largeur_fenetre() // 2, 0, "  a gagné !",
                          couleur="black", taille=2 * int(circ_rad), ancrage="n")
