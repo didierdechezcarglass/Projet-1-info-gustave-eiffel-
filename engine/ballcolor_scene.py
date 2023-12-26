@@ -41,6 +41,7 @@ class BallColors:
         for index, button in enumerate(self.buttons):
             button.update(event, coordinates)
             if button.click(event, coordinates):
+                print(self.ball_colors[index // 6])
                 excluded_rgb = self.ball_colors_rgb[0:index//6] + self.ball_colors_rgb[(index//6) + 1:]
                 while self.ball_colors_rgb[index // 6] in excluded_rgb:
                     self.ball_colors_rgb[index // 6][0] = min(255, max(0, self.ball_colors_rgb[index // 6][0] + 5))

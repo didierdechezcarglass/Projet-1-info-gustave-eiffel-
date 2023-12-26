@@ -1,14 +1,23 @@
 import random
 def random_tirette():
-    n_holes = random.randint(1, 3)
-    ls_holes = [1] * n_holes + [0] * (7 - n_holes)
-    random.shuffle(ls_holes)
-    return ls_holes
+    n_holes = random.randint(3, 5)
+    ls_holes = [0] * 7
+    avail_index = [i for i in range(len(ls_holes))]
+    for hole in range(1, len(ls_holes), 2):
+        ls_holes[hole] = 1
+        n_holes -= 1
+        avail_index.remove(hole)
+    while n_holes > 0:
+        new_hole = avail_index.pop(random.randint(0, len(avail_index) - 1))
+        ls_holes[new_hole] = 1
+        n_holes -= 1
+
+    return [0] + ls_holes + [0]
 
 def decale(lst, sens):
     new_lst = [0] * len(lst)
-    for i in range(len(lst)):
-        directed = (i + sens) % len(lst)
+    for i in range(1, len(lst) - 1):
+        directed = (i + sens)
         new_lst[directed] = lst[i]
     return new_lst
 
@@ -31,13 +40,15 @@ class Tirette:
             self.affect = self.affect_horizontal
     def decalage(self,sens):
         internal_incr = sens
-        self.trous = decale(self.trous,sens)
-        self.position += internal_incr
+        if 0 <= self.position + internal_incr <= 2:
+            self.trous = decale(self.trous, sens)
+            self.position += internal_incr
         return self.trous
 
     def affect_vertical(self, grid):
         for vert in range(grid.vertical_length):
-            grid.affect_hole(self.index, vert, "vert", self.trous[vert])
+            grid.affect_hole(self.index, vert, "vert", self.trous[vert + 1])
     def affect_horizontal(self, grid):
+
         for hor in range(grid.horizontal_length):
-            grid.affect_hole(hor, self.index, "hor", self.trous[hor])
+            grid.affect_hole(hor, self.index, "hor", self.trous[hor + 1])

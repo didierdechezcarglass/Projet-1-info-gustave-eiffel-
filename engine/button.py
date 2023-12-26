@@ -39,6 +39,7 @@ class Button:
         """
         updates the button to execute the command if clicked
         """
+
         if self.click(event, coordinates):
             self.command(*commandparams, **commandparamsdict)
     def hover(self, coordinates: tuple[int, int]) -> bool:

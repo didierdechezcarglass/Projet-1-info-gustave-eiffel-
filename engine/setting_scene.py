@@ -59,7 +59,7 @@ class Setting:
         button_sizey = text_sizey
         start_x = fl.largeur_fenetre() / 2 + text_sizey
         for index, (text, value) in enumerate(self.settings.items()):
-
+            value = "Non" if value == 0 else "Oui" if value == 1 else value
             fl.texte(fl.largeur_fenetre() / 2, start_y + delta_y / 2, f"{text} : {value}", taille=text_sizey, couleur="Black", ancrage="center")
             Button_1, Button_2 = self.buttons[index]
             text_sizex = fl.taille_texte(f"{text} : {value}", taille=text_sizey)[0] / 2
