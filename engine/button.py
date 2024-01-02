@@ -1,3 +1,12 @@
+"""
+class managing the buttons
+
+classes:
+Button
+
+imports:
+fltk.py
+"""
 from . import fltk as fl
 class Button:
     """
@@ -18,6 +27,8 @@ class Button:
         checks if the button is clicked
     hover(coordinates) -> Bool:
         checks if the button is hovered
+    draw() -> None:
+        draws the button
     """
     def __init__(self, coord, size, text_setting, color="green", image="", command: () = lambda : None):
         """
@@ -28,7 +39,8 @@ class Button:
         self.command = command
         self.text_setting = text_setting
         self.command = command
-        # sets the draw method in function of parameter image (if no image draw with image, else draw without img)
+        # sets the draw method in function of parameter image
+        # (if no image draw with image, else draw without img)
         if image:
             self.draw = self.draw_image
         else:
@@ -39,32 +51,58 @@ class Button:
         """
         updates the button to execute the command if clicked
         """
-
         if self.click(event, coordinates):
             self.command(*commandparams, **commandparamsdict)
     def hover(self, coordinates: tuple[int, int]) -> bool:
         """
         checks if the button is hovered
+
+        >>> t = Button((0, 0), (10, 10), [])
+        >>> t.hover((2, 2))
+        True
+        >>> t.hover((100, 100))
+        False
         """
-        return (self.origin[0] <= coordinates[0] <= self.origin[0]+self.width) and (self.origin[1] <= coordinates[1] <= self.origin[1]+self.height)
+        return (self.origin[0] <= coordinates[0] <= self.origin[0]+self.width) and\
+               (self.origin[1] <= coordinates[1] <= self.origin[1]+self.height)
+
     def click(self, event, coordinates: tuple[int, int]) -> bool:
         """
         checks if the button is clicked
+        >>> t = Button((0, 0), (10, 10), [])
+        >>> leftclick = ["ClicGauche"]
+        >>> t.click(leftclick, (2,2))
+        True
+        >>> t.click([""], (2,2))
+        False
+        >>> t.click([""], (100, 100))
+        False
+        >>> t.click(leftclick, (100, 100))
+        False
         """
         return self.hover(coordinates) and fl.type_ev(event) == "ClicGauche"
+
     def draw_image(self) -> None:
         """
         draws the image of the button
         """
-        fl.image(*self.origin, self.image, largeur=self.width, hauteur=self.height, ancrage="nw")
+        fl.image(*self.origin, self.image,
+                 largeur=self.width, hauteur=self.height, ancrage="nw")
         text_cent = self.origin[0]+(self.width/2), self.origin[1]+(self.height/2),
-        fl.texte(*text_cent, self.text_setting[0], couleur=self.text_setting[1], taille=self.text_setting[2], ancrage="center")
+        fl.texte(*text_cent, self.text_setting[0],
+                 couleur=self.text_setting[1], taille=self.text_setting[2], ancrage="center")
 
     def draw_without_image(self) -> None:
         """
         draws the button without the image
         """
-        southeast = [self.origin[0] + self.width, self.origin[1] + self.height]
-        fl.rectangle(*self.origin, *southeast, remplissage = self.color)
-        text_cent = self.origin[0]+(self.width/2), self.origin[1]+(self.height/2),
-        fl.texte(*text_cent, self.text_setting[0], couleur = self.text_setting[1], taille=self.text_setting[2], ancrage="center")
+        southeast = [self.origin[0] + self.width,
+                     self.origin[1] + self.height]
+        fl.rectangle(*self.origin, *southeast,
+                     remplissage=self.color)
+        text_cent = self.origin[0]+(self.width/2),\
+            self.origin[1]+(self.height/2),
+        fl.texte(*text_cent, self.text_setting[0],
+                 couleur=self.text_setting[1],
+                 taille=self.text_setting[2], ancrage="center")
+

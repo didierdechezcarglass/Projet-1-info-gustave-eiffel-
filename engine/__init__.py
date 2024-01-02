@@ -1,12 +1,24 @@
+"""
+the main engine class, will manage game and game scenes
+
+classes:
+Renderer
+"""
 from . import fltk as fl
+
 
 class Renderer:
     """
     main game class that allows the user to run a gameloop
-    attributes:
 
+    attributes:
     scene : Any ->  current scene of the game (will be set to None at the __init__)
     __running : False -> sets the game to a running state
+
+    methods:
+    stop() -> None: stops the game
+    update(event : fl.TkEvent) -> updates the renderer
+    run() -> runs the mainloop
     """
     def __init__(self, res: tuple[int, int]) -> None:
         """
@@ -22,7 +34,7 @@ class Renderer:
         """
         self.__running = False
 
-    def update(self, event) -> None:
+    def update(self, event: fl.TkEvent) -> None:
         """
         updates the current scene using the current event collected in the mainloop
         """
