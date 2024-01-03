@@ -14,7 +14,8 @@ fltk.py
 button.py
 """
 import random
-from game import Grid, Ball
+from game import Grid
+from game.ball import Ball
 from game.tirette import Tirette
 from . import fltk as fl
 from .button import Button
@@ -158,7 +159,8 @@ class Game:
 
         # cheks for the current players and if the game is stopped
         self.alive_players = self.check_players()
-        self.current_player = max(0, self.current_player % (len(self.alive_players)))
+        if self.alive_players:
+            self.current_player = max(0, self.current_player % (len(self.alive_players)))
         self.game_stopped = len(self.alive_players) <= 1
 
     def update(self, event) -> None:
@@ -247,17 +249,17 @@ class Game:
         """
         draws the current status of the game if it is lost
         """
-        size_x = fl.taille_texte(" a gagné !", taille=2 * int(min(s_x / 8, s_y / 8)))[0]
-        player_color = self.alive_players[self.current_player][1]
-        circ_rad = min(s_x / 8, s_y / 8)
         if len(self.alive_players) == 1:
+            size_x = fl.taille_texte(" a gagné !", taille=2 * int(min(s_x / 8, s_y / 8)))[0]
+            player_color = self.alive_players[self.current_player][1]
+            circ_rad = min(s_x / 8, s_y / 8)
             fl.cercle((fl.largeur_fenetre() // 2) - size_x / 2, circ_rad, circ_rad, couleur="black",
                       remplissage=player_color)
             fl.texte(fl.largeur_fenetre() // 2, 0, "  a gagné !",
                      couleur="black", taille=2 * int(circ_rad), ancrage="n")
         else:
             fl.texte(fl.largeur_fenetre() // 2, 0, "match nul", couleur="black",
-                     taille=2 * int(max(s_x / 8, s_y / 8)), ancrage="n")
+                     taille=2 * int(min(s_x / 8, s_y / 8)), ancrage="n")
 
     def draw(self):
         """
