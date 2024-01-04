@@ -1,4 +1,8 @@
 """
+authors of the files:
+Léo PIERRAT
+Quentin BARTOLONE
+
 class managing the buttons
 
 classes:
@@ -8,6 +12,8 @@ imports:
 fltk.py
 """
 from . import fltk as fl
+
+
 class Button:
     """
     Button that can be clicked to execute a command
@@ -30,7 +36,7 @@ class Button:
     draw() -> None:
         draws the button
     """
-    def __init__(self, coord, size, text_setting, color="green", image="", command: () = lambda : None):
+    def __init__(self, coord, size, text_setting, color="green", image="", command: () = lambda: None):
         """
         constructor
         """
@@ -47,12 +53,14 @@ class Button:
             self.draw = self.draw_without_image
         self.color = color
         self.image = image
+
     def update(self, event, coordinates, *commandparams, **commandparamsdict):
         """
         updates the button to execute the command if clicked
         """
         if self.click(event, coordinates):
             self.command(*commandparams, **commandparamsdict)
+
     def hover(self, coordinates: tuple[int, int]) -> bool:
         """
         checks if the button is hovered
@@ -63,8 +71,8 @@ class Button:
         >>> t.hover((100, 100))
         False
         """
-        return (self.origin[0] <= coordinates[0] <= self.origin[0]+self.width) and\
-               (self.origin[1] <= coordinates[1] <= self.origin[1]+self.height)
+        return (self.origin[0] <= coordinates[0] <= self.origin[0] + self.width) and\
+               (self.origin[1] <= coordinates[1] <= self.origin[1] + self.height)
 
     def click(self, event, coordinates: tuple[int, int]) -> bool:
         """
@@ -88,7 +96,7 @@ class Button:
         """
         fl.image(*self.origin, self.image,
                  largeur=self.width, hauteur=self.height, ancrage="nw")
-        text_cent = self.origin[0]+(self.width/2), self.origin[1]+(self.height/2),
+        text_cent = self.origin[0] + (self.width / 2), self.origin[1] + (self.height / 2)
         fl.texte(*text_cent, self.text_setting[0],
                  couleur=self.text_setting[1], taille=self.text_setting[2], ancrage="center")
 
@@ -100,9 +108,8 @@ class Button:
                      self.origin[1] + self.height]
         fl.rectangle(*self.origin, *southeast,
                      remplissage=self.color)
-        text_cent = self.origin[0]+(self.width/2),\
-            self.origin[1]+(self.height/2),
+        text_cent = self.origin[0] + (self.width / 2),\
+            self.origin[1] + (self.height/2)
         fl.texte(*text_cent, self.text_setting[0],
                  couleur=self.text_setting[1],
                  taille=self.text_setting[2], ancrage="center")
-

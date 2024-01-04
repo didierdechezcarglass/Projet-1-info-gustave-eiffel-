@@ -1,4 +1,8 @@
 """
+authors of the files:
+Léo PIERRAT
+Quentin BARTOLONE
+
 management of the ball color scene
 
 classes:
@@ -96,10 +100,18 @@ class BallColors:
         for index, button in enumerate(self.buttons):
             button.update(event, coordinates)
             if button.click(event, coordinates):
-                excluded_rgb = self.ball_colors_rgb[0:index // 6] + self.ball_colors_rgb[(index//6) + 1:]
-                while self.ball_colors_rgb[index // 6] in excluded_rgb:
-                    self.ball_colors_rgb[index // 6][0] = min(255, max(0, self.ball_colors_rgb[index // 6][0] + 5))
-                self.ball_colors[index // 6] = rgb_to_hex(self.ball_colors_rgb[index // 6])
+                delta = -5 if index % 2 else 5
+                ball, color = index // 6, (index % 6) // 2
+                excluded_rgb = self.ball_colors_rgb[0:ball] + self.ball_colors_rgb[ball + 1:]
+                while self.ball_colors_rgb[ball] in excluded_rgb:
+                    self.ball_colors_rgb[ball][color] += delta
+                    # sets the delta to 0 or 255 if the ball color reaches a certain ammount
+                    if self.ball_colors_rgb[ball][color] < 0:
+                        self.ball_colors_rgb[ball][color] = 255
+                    if self.ball_colors_rgb[ball][color] > 255:
+                        self.ball_colors_rgb[ball][color] = 0
+
+                self.ball_colors[ball] = rgb_to_hex(self.ball_colors_rgb[ball])
 
     def draw(self) -> None:
         """

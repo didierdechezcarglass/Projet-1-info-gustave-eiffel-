@@ -1,9 +1,14 @@
 """
+authors of the files:
+Léo PIERRAT
+Quentin BARTOLONE
+
 the file containing the tile= class
 
 classes:
 Tile
 """
+
 
 class Tile:
     """
@@ -13,7 +18,8 @@ class Tile:
     no public attributes
 
     methods:
-    change_hole(hole_type : str, hole_value : bool | int) -> None: changes the hole (vert or hor) to value hole_value
+    change_hole(hole_type : str, hole_value : bool | int) -> None:
+        changes the hole (vert or hor) to value hole_value
     set_ball(ball: Ball) -> None: sets the to ball of tile to ball
     """
     def __init__(self) -> None:
@@ -47,4 +53,3 @@ class Tile:
         sets the current ball of the tile to a ball ball
         """
         self.__current_ball = ball
-

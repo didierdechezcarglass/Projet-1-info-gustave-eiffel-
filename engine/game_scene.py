@@ -1,4 +1,8 @@
 """
+authors of the files:
+Léo PIERRAT
+Quentin BARTOLONE
+
 game scene
 
 uses the files from package game to manage all the cores mechanics

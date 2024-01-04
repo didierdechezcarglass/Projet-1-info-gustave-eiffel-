@@ -1,4 +1,8 @@
 """
+authors of the files:
+Léo PIERRAT
+Quentin BARTOLONE
+
 main file to run the pieges game
 
 classes:

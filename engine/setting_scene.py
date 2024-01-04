@@ -1,4 +1,8 @@
 """
+authors of the files:
+Léo PIERRAT
+Quentin BARTOLONE
+
 setting scene file
 
 classes:

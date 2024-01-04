@@ -1,4 +1,8 @@
 """
+authors of the files:
+Léo PIERRAT
+Quentin BARTOLONE
+
 management of the menu scene
 
 functions:
@@ -123,14 +127,14 @@ class Menu:
         self.app = app
         self.buttons = []
         size_x = (fl.largeur_fenetre()) - (2 * fl.largeur_fenetre() // 10)
-        button_x = (fl.largeur_fenetre() // 10)
+        button_x = fl.largeur_fenetre() // 10
         size_y = (fl.hauteur_fenetre() // 4) - (2*fl.hauteur_fenetre() // 20)
         delta_y = fl.hauteur_fenetre() // 4
         # all the commands to switch scenes
         commands = [lambda: set_game(self.app, self),
                     lambda: set_setting(self.app, self),
                     lambda: set_ballcolor(self.app, self),
-                    lambda: self.app.stop()]
+                    self.app.stop]
         # all the button prompts
         prompts = ["Jouer", "Paramètres", "Couleur balles", "Quitter"]
         for i in range(4):

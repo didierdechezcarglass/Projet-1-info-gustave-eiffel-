@@ -1,4 +1,8 @@
 """
+authors of the files:
+Léo PIERRAT
+Quentin BARTOLONE
+
 modules that manages the tirettes
 
 classes:
@@ -40,7 +44,7 @@ def random_tirette() -> list:
 def decale(lst: list, sens: int) -> list:
     """
     moves a list to a certain sense sens
-    note that the first and last values of the list are not affected as this is a not a circular move
+    note that the first and last values of the list are not affected as it is not a circular move
 
     >>> decale([0, 0, 1, 1, 1, 1, 0, 0], 1)
     [0, 0, 0, 1, 1, 1, 1, 0]
@@ -81,7 +85,7 @@ class Tirette:
         else:
             self.affect = self.affect_horizontal
 
-    def decalage(self, sens : int) -> list:
+    def decalage(self, sens: int) -> list:
         """
         moves the tirette holes if possible
         """

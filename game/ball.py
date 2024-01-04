@@ -1,9 +1,14 @@
 """
+authors of the files:
+Léo PIERRAT
+Quentin BARTOLONE
+
 the file containning the ball class
 
 classes:
 Ball
 """
+
 
 class Ball:
     """
@@ -26,6 +31,7 @@ class Ball:
         """
         self.__player_id = player_id
         self.__alive = True
+
     def kill(self) -> None:
         """
         kills the ball
@@ -51,5 +57,3 @@ class Ball:
         returns the player assigned to the ball
         """
         return self.__player_id
-
-

@@ -1,4 +1,8 @@
 """
+authors of the files:
+Léo PIERRAT
+Quentin BARTOLONE
+
 manipulation of grid
 
 classes:
@@ -8,6 +12,7 @@ import:
 tile.py
 """
 from .tile import Tile
+
 
 class Grid:
     """
