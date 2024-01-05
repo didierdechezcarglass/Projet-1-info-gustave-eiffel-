@@ -43,15 +43,19 @@ class Game:
     init_nocompl(n_players: int) -> None: place the balls on the grid randomly
     """
     def __init__(self, colors, player_number, menu_command, complementary : bool) -> None:
+        """
+        constructor
+        """
         self.grid = Grid()
         tirette_vert = []
         tirette_horizon = []
+
         for loop in range(self.grid.vertical_length):
             tirette_vert.append(Tirette(loop, 'vert'))
             tirette_vert[-1].affect(self.grid)
-        for loop in range(self.grid.horizontal_length):
             tirette_horizon.append(Tirette(loop, "hor"))
             tirette_horizon[-1].affect(self.grid)
+
         self.tirette_vert = tirette_vert
         self.tirette_horizon = tirette_horizon
         self.alive_players = [(i + 1, colors[i]) for i in range(player_number)]
@@ -93,6 +97,7 @@ class Game:
             current_player += 1
             current_player %= n_player
             n_balls -= 1
+
     def check_players(self) -> list:
         """
         gives the number of players left after a move
